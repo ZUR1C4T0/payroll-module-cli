@@ -26,17 +26,17 @@ Debe tener en cuenta un menú principal con los siguientes requerimientos:
    Nombre: Ana Maria Jaimes González
    Cargo: Auxiliar Administrativo
    Horas Trabajadas (mes): 40
-   Salario Bruto: $800, 000
+   Salario Bruto: $800,000
    Horas Extras: 20
-   Total pago Horas Extras: 3500, 000
+   Total pago Horas Extras: $500,000
 
    *************************************************
    *************** DESCUENTOS DE LEY ***************
    *************************************************
-   Salud(4%): $52000
-   Pensión: $52000
-   ARL(0,522%): $6786
-   Total Descuentos: $104000
+   Salud(4%): $52,000
+   Pensión: $52,000
+   ARL(0,522%): $6,786
+   Total Descuentos: $104,000
 
    Total a pagar: $1,189,214
 
@@ -45,7 +45,7 @@ Debe tener en cuenta un menú principal con los siguientes requerimientos:
    *************************************************
    ```
 
-2. El empleado si es OPERATIVO(Trabajador Oficial), tiene una asignación de $40,000 por
+2. El empleado si es **OPERATIVO** (Trabajador Oficial), tiene una asignación de _$40,000_ por
    hora pero debe cancelar de forma autónoma los aportes a la seguridad social teniendo
    en cuenta el cargo y las horas laboradas mensualmente:
 
@@ -74,10 +74,6 @@ Debe tener en cuenta un menú principal con los siguientes requerimientos:
    | ------------------------- | -------------- | ----------------------- | --- | ------- | --- | ------ | ------ | ------- | ---- | ------------- |
    | Ana María Jaimes González | ADMINISTRATIVO | Auxiliar Administrativo | 40  | 800000  | 20  | 500000 | 52000  | 52000   | 6786 | 1189124       |
    | Blanca Luz Iglesias Serpa | OPERATIVO      | Oficios Generales       | 100 | 4000000 | 0   | 0      | 200000 | 256000  | 8352 | 3535648       |
-
-   - Ambiente Requerido: Laboratorio de Contenidos Digitales, Centro Nacional Colombo Alemán
-     – Sede TIC.
-   - Materiales: Tablero acrílico, marcadores, 25 equipos de cómputo Dell Otiplex.
 
 4. Actividades de evaluación
    | Evidencias de Aprendizaje | Criterios de Evaluación | Técnicas e Instrumentos de Evaluación |
