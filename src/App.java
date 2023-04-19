@@ -17,16 +17,15 @@ public class App {
         DecimalFormat formatPerc = new DecimalFormat("##.###%");
 
         // Se definen variables globales
-        short tipoEmpleado;
-        int valorHora, valorHoraExtra;
-        double riesgoArl;
-        String cargo;
+        short tipoEmpleado, cargo = 0, horasTrabajadas = 0, horasExtrasTrabajadas = 0;
+        int valorHora, valorHoraExtra, totalHorasExtras = 0, salarioBruto = 0;
+        double riesgoArl = 0;
 
         // Se imprime el menú principal
         System.out.println("------- MENÚ PRINCIPAL -------");
         System.out.println("Escoja el tipo de empleado:");
-        System.out.println("1. ADMINISTRATIVO");
-        System.out.println("2. OPERATIVO");
+        System.out.println("    1. ADMINISTRATIVO");
+        System.out.println("    2. OPERATIVO");
 
         // Se controla que el usuario no inserte una opción inválida
         while (true) {
@@ -40,31 +39,74 @@ public class App {
             System.out.println("------ OPCIÓN INVALIDA ------");
         }
 
-        if (tipoEmpleado == 1) { // Administrativo
+        // Se pide el nombre
+        System.out.print("Nombre del empleado: ");
+        String nombre = input.nextLine();
+
+        // Si es operativo pide las horas extras trabajadas
+        if (tipoEmpleado == 2) {
+            System.out.print("Escoja el cargo del empleado: ");
+            System.out.print("  1. Conductor");
+            System.out.print("  2. Oficios generales");
+            System.out.print("  3. Vigilancia");
+
+            // Se controla que el usuario no inserte una opción inválida
+            while (true) {
+                System.out.println("");
+                System.out.print("Digite una opción (1 | 2 | 3): ");
+                cargo = scanner.nextShort();
+                if (cargo == 1 || cargo == 2 || cargo == 3) {
+                    System.out.println("");
+                    break;
+                }
+                System.out.println("------ OPCIÓN INVALIDA ------");
+            }
+        }
+
+        // Se establecen las constantes para cada tipo de empleado
+        if (tipoEmpleado == 1) {
             valorHora = 20000;
             valorHoraExtra = 25000;
             riesgoArl = 0.00522;
+        } else {
+            valorHora = 400000;
+            valorHoraExtra = 0;
+            switch (cargo) {
+                case 1:
+                    riesgoArl = 0.01044;
+                    break;
+                case 2:
+                    riesgoArl = 0.00522;
+                    break;
+                case 3:
+                    riesgoArl = 0.04350;
+                    break;
+            }
+        }
 
-            System.out.print("Nombre del empleado: ");
-            String nombre = input.nextLine();
-
-            System.out.print("Cargo del empleado");
-            cargo = input.nextLine();
-
+        // Se pide la cantidad de horas trabajadas
+        if (tipoEmpleado == 1) {
             System.out.print("Horas trabajadas en el mes: ");
-            short horasTrabajadas = scanner.nextShort();
-            int salarioBruto = valorHora * horasTrabajadas;
+            horasTrabajadas = scanner.nextShort();
+            salarioBruto = valorHora * horasTrabajadas;
+        } else {
+            // los operaticos trabajan horas fijas
+        }
 
+        // Si es administrativo se pide la cantidad de horas extras trabajadas
+        if (tipoEmpleado == 1) {
             System.out.print("Horas extras trabajadas en el mes: ");
-            short horasExtrasTrabajadas = scanner.nextShort();
-            int totalHorasExtras = valorHoraExtra * horasExtrasTrabajadas;
+            horasExtrasTrabajadas = scanner.nextShort();
+            totalHorasExtras = valorHoraExtra * horasExtrasTrabajadas;
+        }
 
-            int salud = (int) ((salarioBruto + totalHorasExtras) * 0.04);
-            int arl = (int) ((salarioBruto + totalHorasExtras) * riesgoArl);
-            int totalDescuentos = salud * 2;
+        int salud = (int) ((salarioBruto + totalHorasExtras) * 0.04);
+        int arl = (int) ((salarioBruto + totalHorasExtras) * riesgoArl);
+        int totalDescuentos = salud * 2;
 
-            int pagoTotal = salarioBruto + totalHorasExtras - totalDescuentos - arl;
+        int pagoTotal = salarioBruto + totalHorasExtras - totalDescuentos - arl;
 
+        if (tipoEmpleado == 1) { // Administrativo
             System.out.println("");
             System.out.println("*************************************************");
             System.out.println("**************** VOLANTE DE PAGO ****************");
@@ -89,6 +131,7 @@ public class App {
             System.out.println("*************************************************");
             System.out.println("************ FIN DEL VOLANTE DE PAGO ************");
             System.out.println("*************************************************");
+            System.out.println("");
         }
 
         // Se cierran las entradas de datos
