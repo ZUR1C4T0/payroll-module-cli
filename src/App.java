@@ -8,19 +8,27 @@ public class App {
      * @param args los argumentos de la línea de comando
      */
     public static void main(String[] args) {
+        // Se definen las entradas de datos
         Scanner scanner = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
+
+        // Se definen formateadores para dinero y porcentajes
         DecimalFormat formatCash = new DecimalFormat("$#,###");
         DecimalFormat formatPerc = new DecimalFormat("##.###%");
 
+        // Se definen variables globales
         short tipoEmpleado;
         int valorHora, valorHoraExtra;
         double riesgoArl;
+        String cargo;
 
+        // Se imprime el menú principal
         System.out.println("------- MENÚ PRINCIPAL -------");
         System.out.println("Escoja el tipo de empleado:");
         System.out.println("1. ADMINISTRATIVO");
         System.out.println("2. OPERATIVO");
 
+        // Se controla que el usuario no inserte una opción inválida
         while (true) {
             System.out.println("");
             System.out.print("Digite una opción (1 | 2): ");
@@ -33,13 +41,15 @@ public class App {
         }
 
         if (tipoEmpleado == 1) { // Administrativo
-            String cargo = "Auxiliar Administrativo";
             valorHora = 20000;
             valorHoraExtra = 25000;
             riesgoArl = 0.00522;
 
             System.out.print("Nombre del empleado: ");
-            String nombre = scanner.next();
+            String nombre = input.nextLine();
+
+            System.out.print("Cargo del empleado");
+            cargo = input.nextLine();
 
             System.out.print("Horas trabajadas en el mes: ");
             short horasTrabajadas = scanner.nextShort();
@@ -81,7 +91,9 @@ public class App {
             System.out.println("*************************************************");
         }
 
+        // Se cierran las entradas de datos
         scanner.close();
+        input.close();
     }
 
 }
