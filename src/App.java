@@ -1,4 +1,5 @@
 
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
@@ -6,15 +7,17 @@ public class App {
 
     /**
      * @param args los argumentos de la línea de comando
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Se definen las entradas de datos
         Scanner scanner = new Scanner(System.in);
         Scanner input = new Scanner(System.in);
 
-        // Se definen formateadores para dinero y porcentajes
+        // Se definen formateadores para dinero, porcentajes y la tabla
         DecimalFormat formatCash = new DecimalFormat("$#,###");
         DecimalFormat formatPerc = new DecimalFormat("##.###%");
+        final String formatoTabla = "%-25s %-18s %-3s %-13s %-3s %-11s %-10s %-10s %-10s %-13s%n";
 
         // Se definen variables globales
         short tipoEmpleado, cargo = 0, horasTrabajadas = 0, horasExtrasTrabajadas = 0;
@@ -167,6 +170,54 @@ public class App {
         // Se cierran las entradas de datos
         scanner.close();
         input.close();
+
+        // Se declaran las variables para manipular en archivo TXT
+        File archivo = new File("nomina.txt");
+        Writer configArchivo;
+        PrintWriter escritor;
+
+        // Si el TXT no existe, se crea
+        if (!archivo.exists()) {
+            archivo.createNewFile();
+            configArchivo = new FileWriter(archivo, true);
+            escritor = new PrintWriter(configArchivo);
+
+            // Encabezado de la tabla
+            final String[] encabezadoTabla = {"Nombre", "Cargo", "HT", "Salario", "HE", "TPHE", "Salud", "Pensión", "ARL", "Total a pagar"};
+            escritor.printf(formatoTabla, (Object[]) encabezadoTabla);
+
+            // Línea que separa en encabezado del cuerpo de la tabla
+            for (short i = 0; i < 128; i++) {
+                escritor.print("-");
+            }
+            escritor.println();
+
+            escritor.close();
+            configArchivo.close();
+        }
+
+        configArchivo = new FileWriter(archivo, true);
+        escritor = new PrintWriter(configArchivo);
+
+        // Se guarda el nuevo empleado ingresado
+        escritor.printf(
+                formatoTabla,
+                nombre,
+                cargoStr.toUpperCase(),
+                horasTrabajadas,
+                formatCash.format(salarioBruto),
+                horasExtrasTrabajadas,
+                formatCash.format(totalHorasExtras),
+                formatCash.format(salud),
+                formatCash.format(pension),
+                formatCash.format(arl),
+                formatCash.format(pagoTotal)
+        );
+
+        // Se cierran los Streams de datos
+        escritor.close();
+        configArchivo.close();
+
     }
 
 }

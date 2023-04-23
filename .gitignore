@@ -6,6 +6,9 @@
 # Log file
 *.log
 
+# Auto-generated files
+nomina.txt
+
 # BlueJ files
 *.ctxt
 
