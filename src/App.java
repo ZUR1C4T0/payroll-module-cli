@@ -49,10 +49,10 @@ public class App {
 
         // Si es operativo pide las horas extras trabajadas
         if (tipoEmpleado == 2) {
-            System.out.print("Escoja el cargo del empleado: ");
-            System.out.print("  1. Conductor");
-            System.out.print("  2. Oficios generales");
-            System.out.print("  3. Vigilancia");
+            System.out.println("Escoja el cargo del empleado: ");
+            System.out.println("  1. Conductor");
+            System.out.println("  2. Oficios generales");
+            System.out.println("  3. Vigilancia");
 
             // Se controla que el usuario no inserte una opción inválida
             while (true) {
