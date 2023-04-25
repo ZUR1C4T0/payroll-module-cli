@@ -73,7 +73,7 @@ public class App {
             valorHoraExtra = 25000;
             riesgoArl = 0.00522;
         } else {
-            valorHora = 400000;
+            valorHora = 40000;
             valorHoraExtra = 0;
             switch (cargo) {
                 case 1 ->
