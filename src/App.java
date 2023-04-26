@@ -6,175 +6,301 @@ import java.util.Scanner;
 public class App {
 
     /**
-     * @param args los argumentos de la línea de comando
-     * @throws java.io.IOException
+     * Esta función de Java calcula e imprime el formulario de pago y guarda la
+     * nómina de los empleados según su tipo y puesto de trabajo.
+     * 
+     * @param args
+     * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        // Se definen las entradas de datos
-        Scanner scanner = new Scanner(System.in);
+        // Esto permite que el programa lea la entrada del usuario desde la consola.
         Scanner input = new Scanner(System.in);
 
-        // Se definen formateadores para dinero, porcentajes y la tabla
-        DecimalFormat formatCash = new DecimalFormat("$#,###");
-        DecimalFormat formatPerc = new DecimalFormat("##.###%");
-        final String formatoTabla = "%-25s %-18s %-3s %-13s %-3s %-11s %-10s %-10s %-10s %-13s%n";
+        // Enum de opciones
+        final short ADMINISTRATIVO = 1;
+        final short OPERATIVO = 2;
 
-        // Se definen variables globales
-        short tipoEmpleado, cargo = 0, horasTrabajadas = 0, horasExtrasTrabajadas = 0;
-        int valorHora, valorHoraExtra, totalHorasExtras = 0, salarioBruto, salud, pension, arl, totalDescuentos;
-        double riesgoArl = 0;
-        String cargoStr;
+        // Enum de Operativos
+        final short OFICIOS_GENERALES = 1;
+        final short CONDUCTOR = 2;
+        final short VIGILANCIA = 3;
 
-        // Se imprime el menú principal
-        System.out.println("------- MENÚ PRINCIPAL -------");
+        /*** Se definen variables globales ***/
+        short op;
+        String nombre;
+        String cargo;
+        int valorHora;
+        int valorHoraExtra;
+        short horasTrabajadas;
+        short horasExtrasTrabajadas = 0;
+        int salarioBruto;
+        int totalHorasExtras = 0;
+        int totalAPagar;
+        // Aportes sociales
+        int salud;
+        int pension;
+        int arl;
+        int totalDescuentos;
+        double riesgoArl;
+
+        System.out.println("");
+        System.out.println("******************************");
+        System.out.println("******* MENÚ PRINCIPAL *******");
+        System.out.println("******************************");
         System.out.println("Escoja el tipo de empleado:");
         System.out.println("    1. ADMINISTRATIVO");
         System.out.println("    2. OPERATIVO");
 
-        // Se controla que el usuario no inserte una opción inválida
         while (true) {
-            System.out.println("");
-            System.out.print("Digite una opción (1 | 2): ");
-            tipoEmpleado = scanner.nextShort();
-            if (tipoEmpleado == 1 || tipoEmpleado == 2) {
-                System.out.println("");
+            System.out.print("Opción: ");
+            op = input.nextShort();
+            if (op == ADMINISTRATIVO || op == OPERATIVO) {
                 break;
             }
-            System.out.println("------ OPCIÓN INVALIDA ------");
+            System.out.println("\n****** OPCIÓN INVALIDA ******\n");
         }
 
-        // Se pide el nombre
-        System.out.print("Nombre del empleado: ");
-        String nombre = input.nextLine();
+        switch (op) {
+            case ADMINISTRATIVO -> {
+                valorHora = 20000;
+                valorHoraExtra = 25000;
+                riesgoArl = 0.00522; // 0.522%
+                cargo = "Administrativo";
 
-        // Si es operativo pide las horas extras trabajadas
-        if (tipoEmpleado == 2) {
-            System.out.println("Escoja el cargo del empleado: ");
-            System.out.println("  1. Conductor");
-            System.out.println("  2. Oficios generales");
-            System.out.println("  3. Vigilancia");
+                System.out.print("Nombre y Apellido: ");
+                nombre = input.nextLine();
+                nombre = input.nextLine();
 
-            // Se controla que el usuario no inserte una opción inválida
-            while (true) {
+                System.out.print("Horas trabajadas: ");
+                horasTrabajadas = input.nextShort();
+
+                System.out.print("Horas extras trabajadas: ");
+                horasExtrasTrabajadas = input.nextShort();
+
+                salarioBruto = valorHora * horasTrabajadas;
+                totalHorasExtras = valorHoraExtra * horasExtrasTrabajadas;
+
+                salud = (int) ((salarioBruto + totalHorasExtras) * 0.04); // 4%
+                pension = salud;
+                arl = (int) ((salarioBruto + totalHorasExtras) * riesgoArl);
+                totalDescuentos = salud + pension;
+
+                totalAPagar = salarioBruto + totalHorasExtras - totalDescuentos - arl;
+
+                App.printPaymentForm(
+                        nombre, cargo, horasTrabajadas, salarioBruto, horasExtrasTrabajadas,
+                        totalHorasExtras, salud, pension, arl, riesgoArl, totalDescuentos,
+                        totalAPagar);
+
+                App.savePayroll(nombre, cargo, horasTrabajadas, salarioBruto, horasExtrasTrabajadas,
+                        totalHorasExtras, salud, pension, arl, totalAPagar);
+            }
+
+            case OPERATIVO -> {
+                valorHora = 40000;
+
                 System.out.println("");
-                System.out.print("Digite una opción (1 | 2 | 3): ");
-                cargo = scanner.nextShort();
-                if (cargo == 1 || cargo == 2 || cargo == 3) {
-                    System.out.println("");
-                    break;
+                System.out.println("******************************");
+                System.out.println("******* MENÚ OPERATIVO *******");
+                System.out.println("******************************");
+                System.out.println("Escoja el cargo del empleado: ");
+                System.out.println("  1. Conductor");
+                System.out.println("  2. Oficios generales");
+                System.out.println("  3. Vigilancia");
+
+                while (true) {
+                    System.out.print("Opción: ");
+                    op = input.nextShort();
+                    if (op == OFICIOS_GENERALES || op == CONDUCTOR || op == VIGILANCIA) {
+                        break;
+                    }
+                    System.out.println("\n****** OPCIÓN INVALIDA ******\n");
                 }
-                System.out.println("------ OPCIÓN INVALIDA ------");
+
+                System.out.print("Nombre y Apellido: ");
+                nombre = input.nextLine();
+                nombre = input.nextLine();
+
+                switch (op) {
+                    case OFICIOS_GENERALES -> {
+                        riesgoArl = 0.00522; // 0.522%
+                        horasTrabajadas = 160;
+                        cargo = "Oficios Generales";
+                    }
+                    case CONDUCTOR -> {
+                        riesgoArl = 0.01044; // 1.044%
+                        horasTrabajadas = 100;
+                        cargo = "Conductor";
+                    }
+                    case VIGILANCIA -> {
+                        riesgoArl = 0.04350; // 4.350%
+                        horasTrabajadas = 336;
+                        cargo = "Vigilancia";
+                    }
+                    default -> {
+                        riesgoArl = 0;
+                        horasTrabajadas = 0;
+                        cargo = "";
+                    }
+                }
+
+                salarioBruto = valorHora * horasTrabajadas;
+
+                int indiceBaseDeCotizacion = (int) (salarioBruto * 0.40); // 40%
+                salud = (int) (indiceBaseDeCotizacion * 0.125); // 12.5%
+                pension = (int) (indiceBaseDeCotizacion * 0.16); // 16%
+                arl = (int) (indiceBaseDeCotizacion * riesgoArl);
+                totalDescuentos = salud + pension;
+
+                totalAPagar = salarioBruto - totalDescuentos - arl;
+
+                App.printPaymentForm(
+                        nombre, cargo, horasTrabajadas, salarioBruto, horasExtrasTrabajadas,
+                        totalHorasExtras, salud, pension, arl, riesgoArl, totalDescuentos,
+                        totalAPagar);
+
+                App.savePayroll(nombre, cargo, horasTrabajadas, salarioBruto, horasExtrasTrabajadas,
+                        totalHorasExtras, salud, pension, arl, totalAPagar);
+            }
+
+            default -> {
+                System.out.println("\n****** OPCIÓN INVALIDA ******\n");
             }
         }
 
-        // Se establecen las constantes para cada tipo de empleado
-        if (tipoEmpleado == 1) {
-            valorHora = 20000;
-            valorHoraExtra = 25000;
-            riesgoArl = 0.00522;
-        } else {
-            valorHora = 400000;
-            valorHoraExtra = 0;
-            switch (cargo) {
-                case 1 ->
-                    riesgoArl = 0.01044;
-                case 2 ->
-                    riesgoArl = 0.00522;
-                case 3 ->
-                    riesgoArl = 0.04350;
+        System.out.println("");
+        System.out.println("******************************");
+        System.out.println("******** HASTA PRONTO ********");
+        System.out.println("******************************");
+        System.out.println("");
+
+        input.close();
+    }
+
+    /**
+     * La función imprime un formulario de pago con información del empleado, horas
+     * trabajadas, salario y deducciones.
+     * 
+     * @param {String} nombre
+     * @param {String} cargo
+     * @param {short}  horasTrabajadas
+     * @param {int}    salarioBruto
+     * @param {short}  horasExtrasTrabajadas
+     * @param {int}    totalHorasExtras
+     * @param {int}    salud
+     * @param {int}    pension
+     * @param {int}    arl
+     * @param {double} riesgoArl
+     * @param {int}    totalDescuentos
+     * @param {int}    totalAPagar
+     */
+    static void printPaymentForm(
+
+            String nombre,
+            String cargo,
+            short horasTrabajadas,
+            int salarioBruto,
+            short horasExtrasTrabajadas,
+            int totalHorasExtras,
+            int salud,
+            int pension,
+            int arl,
+            double riesgoArl,
+            int totalDescuentos,
+            int totalAPagar) {
+
+        Scanner input2 = new Scanner(System.in);
+        char op;
+
+        System.out.println("");
+        System.out.println("******************************");
+        System.out.println("******* DESEA IMPRIMIR *******");
+        System.out.println("****** VOLANTE DE PAGO? ******");
+        System.out.println("******************************");
+        System.out.println("");
+
+        while (true) {
+            System.out.println("Opciones: (s)Si    (n)No");
+            op = input2.next().charAt(0);
+
+            if (op == 'n') {
+                input2.close();
+                return;
+            } else if (op == 's') {
+                break;
             }
+
+            System.out.println("\n****** OPCIÓN INVALIDA ******\n");
         }
 
-        // Se pide la cantidad de horas trabajadas
-        if (tipoEmpleado == 1) {
-            System.out.print("Horas trabajadas en el mes: ");
-            horasTrabajadas = scanner.nextShort();
-        } else {
-            switch (cargo) {
-                case 1 ->
-                    horasTrabajadas = 160;
-                case 2 ->
-                    horasTrabajadas = 100;
-                case 3 ->
-                    horasTrabajadas = 336;
-            }
-        }
-
-        // Se calcula el salario bruto
-        salarioBruto = valorHora * horasTrabajadas;
-
-        // Si es administrativo se pide la cantidad de horas extras trabajadas
-        if (tipoEmpleado == 1) {
-            System.out.print("Horas extras trabajadas en el mes: ");
-            horasExtrasTrabajadas = scanner.nextShort();
-            totalHorasExtras = valorHoraExtra * horasExtrasTrabajadas;
-        }
-
-        // Se calculan los aportes sociales
-        if (tipoEmpleado == 1) {
-            salud = (int) ((salarioBruto + totalHorasExtras) * 0.04);
-            pension = salud;
-            arl = (int) ((salarioBruto + totalHorasExtras) * riesgoArl);
-            totalDescuentos = salud + pension;
-        } else {
-            int indiceBaseDeCotizacion = (int) (salarioBruto * 0.40);
-            salud = (int) (indiceBaseDeCotizacion * 0.125);
-            pension = (int) (indiceBaseDeCotizacion * 0.16);
-            arl = (int) (indiceBaseDeCotizacion * riesgoArl);
-            totalDescuentos = salud + pension;
-        }
-
-        int pagoTotal = salarioBruto + totalHorasExtras - totalDescuentos - arl;
-
-        if (tipoEmpleado == 1) {
-            cargoStr = "Administrativo";
-        } else {
-            switch (cargo) {
-                case 1 ->
-                    cargoStr = "Conductor";
-                case 2 ->
-                    cargoStr = "Oficios Generales";
-                case 3 ->
-                    cargoStr = "Vigilancia";
-                default ->
-                    cargoStr = "";
-            }
-        }
+        // Esto permite formatear numeros como dinero y porcentaje.
+        DecimalFormat cashFormat = new DecimalFormat("$#,###");
+        DecimalFormat percentageFormat = new DecimalFormat("##.###%");
 
         System.out.println("");
         System.out.println("*************************************************");
         System.out.println("**************** VOLANTE DE PAGO ****************");
         System.out.println("*************************************************");
         System.out.println("Nombre: " + nombre);
-        System.out.println("Cargo: " + cargoStr);
+        System.out.println("Cargo: " + cargo);
         System.out.println("Horas Trabajadas (mes): " + horasTrabajadas);
-        System.out.println("Salario Bruto: " + formatCash.format(salarioBruto));
+        System.out.println("Salario Bruto: " + cashFormat.format(salarioBruto));
         System.out.println("Horas Extras: " + horasExtrasTrabajadas);
-        System.out.println("Total Horas Extras: " + formatCash.format(totalHorasExtras));
+        System.out.println("Total Horas Extras: " + cashFormat.format(totalHorasExtras));
         System.out.println("");
         System.out.println("*************************************************");
         System.out.println("*************** DESCUENTOS DE LEY ***************");
         System.out.println("*************************************************");
-        System.out.println("Salud: " + formatCash.format(salud));
-        System.out.println("Pensión: " + formatCash.format(pension));
-        System.out.println("ARL(" + formatPerc.format(riesgoArl) + "): " + formatCash.format(arl));
-        System.out.println("Total Descuentos: " + formatCash.format(totalDescuentos));
+        System.out.println("Salud: " + cashFormat.format(salud));
+        System.out.println("Pensión: " + cashFormat.format(pension));
+        System.out.println("ARL(" + percentageFormat.format(riesgoArl) + "): " + cashFormat.format(arl));
+        System.out.println("Total Descuentos: " + cashFormat.format(totalDescuentos));
         System.out.println("");
-        System.out.println("Total a pagar: " + formatCash.format(pagoTotal));
+        System.out.println("Total a pagar: " + cashFormat.format(totalAPagar));
         System.out.println("");
         System.out.println("*************************************************");
         System.out.println("************ FIN DEL VOLANTE DE PAGO ************");
         System.out.println("*************************************************");
         System.out.println("");
 
-        // Se cierran las entradas de datos
-        scanner.close();
-        input.close();
+        input2.close();
+    }
+
+    /**
+     * Esta función guarda la información de nómina de un empleado en una tabla
+     * formateada en un archivo de texto.
+     * 
+     * @param {String} nombre
+     * @param {String} cargo
+     * @param {short}  horasTrabajadas
+     * @param {int}    salarioBruto
+     * @param {short}  horasExtrasTrabajadas
+     * @param {int}    totalHorasExtras
+     * @param {int}    salud
+     * @param {int}    pension
+     * @param {int}    arl
+     * @param {int}    totalAPagar
+     * 
+     * @throws java.io.IOException
+     */
+    static void savePayroll(
+            String nombre,
+            String cargo,
+            short horasTrabajadas,
+            int salarioBruto,
+            short horasExtrasTrabajadas,
+            int totalHorasExtras,
+            int salud,
+            int pension,
+            int arl,
+            int totalAPagar) throws IOException {
 
         // Se declaran las variables para manipular en archivo TXT
         File archivo = new File("nomina.txt");
         Writer configArchivo;
         PrintWriter escritor;
+
+        final String formatoTabla = "%-25s %-18s %-3s %-13s %-3s %-11s %-10s %-10s %-10s %-13s%n";
 
         // Si el TXT no existe, se crea
         if (!archivo.exists()) {
@@ -183,7 +309,8 @@ public class App {
             escritor = new PrintWriter(configArchivo);
 
             // Encabezado de la tabla
-            final String[] encabezadoTabla = {"Nombre", "Cargo", "HT", "Salario", "HE", "TPHE", "Salud", "Pensión", "ARL", "Total a pagar"};
+            final String[] encabezadoTabla = { "Nombre", "Cargo", "HT", "Salario", "HE", "TPHE",
+                    "Salud", "Pensión", "ARL", "Total a pagar" };
             escritor.printf(formatoTabla, (Object[]) encabezadoTabla);
 
             // Línea que separa en encabezado del cuerpo de la tabla
@@ -199,25 +326,24 @@ public class App {
         configArchivo = new FileWriter(archivo, true);
         escritor = new PrintWriter(configArchivo);
 
+        // Esto permite formatear numeros como dinero.
+        DecimalFormat cashFormat = new DecimalFormat("$#,###");
+
         // Se guarda el nuevo empleado ingresado
         escritor.printf(
                 formatoTabla,
                 nombre,
-                cargoStr.toUpperCase(),
+                cargo.toUpperCase(),
                 horasTrabajadas,
-                formatCash.format(salarioBruto),
+                cashFormat.format(salarioBruto),
                 horasExtrasTrabajadas,
-                formatCash.format(totalHorasExtras),
-                formatCash.format(salud),
-                formatCash.format(pension),
-                formatCash.format(arl),
-                formatCash.format(pagoTotal)
-        );
+                cashFormat.format(totalHorasExtras),
+                cashFormat.format(salud),
+                cashFormat.format(pension),
+                cashFormat.format(arl),
+                cashFormat.format(totalAPagar));
 
-        // Se cierran los Streams de datos
         escritor.close();
         configArchivo.close();
-
     }
-
 }
