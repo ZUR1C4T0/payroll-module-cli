@@ -1,0 +1,7 @@
+{
+    "java.project.exportJar.targetPath": "${workspaceFolder}/${workspaceFolderBasename}.jar",
+    "java.project.outputPath": "build",
+    "java.project.sourcePaths": [
+        "src"
+    ]
+}

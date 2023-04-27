@@ -57,7 +57,7 @@ public class App {
             System.out.println("    3. SALIR");
 
             System.out.print("Opción: ");
-            op = input.nextInt();// Integer.parseInt(input.nextLine());
+            op = input.nextInt();
 
             switch (op) {
                 case ADMINISTRATIVO -> {
@@ -111,7 +111,7 @@ public class App {
 
                     while (true) {
                         System.out.print("Opción: ");
-                        op = input.nextInt();// Integer.parseInt(input.nextLine());
+                        op = input.nextInt();
                         if (op == OFICIOS_GENERALES || op == CONDUCTOR || op == VIGILANCIA) {
                             break;
                         }
